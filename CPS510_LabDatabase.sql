@@ -1,7 +1,7 @@
 -- Create table for Employee
 CREATE TABLE Employee (
     Emp_ID INT PRIMARY KEY,
-    SIN VARCHAR(15) NOT NULL,
+    Emp_SIN VARCHAR(15) NOT NULL,
     Email VARCHAR(255) NOT NULL,
     Phone VARCHAR(20),
     Address VARCHAR(255),
