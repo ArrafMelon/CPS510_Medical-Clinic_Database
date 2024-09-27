@@ -1,7 +1,7 @@
 -- Create table for Employee
 CREATE TABLE Employee (
     Emp_ID INT PRIMARY KEY,
-    Emp_SIN VARCHAR(15) NOT NULL,
+    Emp_SIN VARCHAR(15) NOT NULL UNIQUE,
     Email VARCHAR(255) NOT NULL,
     Phone VARCHAR(20),
     Address VARCHAR(255),
@@ -41,7 +41,8 @@ CREATE TABLE Patient (
     First_Name VARCHAR(100),
     Last_Name VARCHAR(100),
     DOB DATE,
-    Gender VARCHAR(10)
+    Gender VARCHAR(10),
+    Healthcard_Number VARCHAR(100)
 );
 
 -- Create table for Medical Record
@@ -68,12 +69,14 @@ CREATE TABLE Updates (
 -- Create table for Prescription
 CREATE TABLE Prescription (
     Prescription_ID INT PRIMARY KEY,
+    Medical_ID INT,
     HC_Number VARCHAR(50),
     Name VARCHAR(255),
     Dosage VARCHAR(255),
     Frequency VARCHAR(255),
     Patient_ID INT,
-    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
+    FOREIGN KEY (Medical_ID) REFERENCES Doctor(Medical_ID)
 );
 
 -- Create table for Appointment
@@ -81,10 +84,12 @@ CREATE TABLE Appointment (
     Appointment_ID INT PRIMARY KEY,
     Patient_ID INT,
     Room_Number INT,
+    Medical_ID INT,
     Appointment_Date DATE,
     Appointment_Time TIMESTAMP,
     Reason VARCHAR(255),
-    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
+    FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID)
 );
 
 -- Create table for Lab Test
@@ -93,34 +98,9 @@ CREATE TABLE Lab_Test (
     Test_Type VARCHAR(255),
     Test_Result CLOB,
     Doctor_ID INT,
-    FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Medical_ID)
-);
-
--- Create table for Attends (M:N relationship between Patient and Medical Professional)
-CREATE TABLE Attends (
     Patient_ID INT,
-    Medical_ID INT,
-    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
-    FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID),
-    PRIMARY KEY (Patient_ID, Medical_ID)
-);
-
--- Create table for Books (relationship between Patient and Appointment)
-CREATE TABLE Books (
-    Patient_ID INT,
-    Appointment_ID INT,
-    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
-    FOREIGN KEY (Appointment_ID) REFERENCES Appointment(Appointment_ID),
-    PRIMARY KEY (Patient_ID, Appointment_ID)
-);
-
--- Create table for Performs (relationship between Doctor and Lab Test)
-CREATE TABLE Performs (
-    Doctor_ID INT,
-    Test_ID INT,
     FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Medical_ID),
-    FOREIGN KEY (Test_ID) REFERENCES Lab_Test(Test_ID),
-    PRIMARY KEY (Doctor_ID, Test_ID)
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
 );
 
 -- DELETE EVERY TABLE!!!!!!!!!!!!!!!!!
