@@ -12,7 +12,6 @@ CREATE TABLE Employee (
 CREATE TABLE Medical_Professional (
     Medical_ID INT PRIMARY KEY,
     Emp_ID INT,
-    Specialty VARCHAR(255),
     FOREIGN KEY (Emp_ID) REFERENCES Employee(Emp_ID)
 );
 
@@ -42,7 +41,7 @@ CREATE TABLE Patient (
     Last_Name VARCHAR(100),
     DOB DATE,
     Gender VARCHAR(10),
-    Healthcard_Number VARCHAR(100)
+    HC_Number VARCHAR(50)
 );
 
 -- Create table for Medical Record
