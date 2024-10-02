@@ -12,7 +12,8 @@ CREATE TABLE Employee (
 CREATE TABLE Medical_Professional (
     Medical_ID INT PRIMARY KEY,
     Emp_ID INT,
-    FOREIGN KEY (Emp_ID) REFERENCES Employee(Emp_ID)
+    FOREIGN KEY (Emp_ID) REFERENCES Employee(Emp_ID),
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
 );
 
 -- Create table for Receptionist (inherits from Employee)
@@ -101,12 +102,4 @@ CREATE TABLE Lab_Test (
     FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Medical_ID),
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
 );
-
--- DELETE EVERY TABLE!!!!!!!!!!!!!!!!!
-BEGIN
-   FOR rec IN (SELECT table_name FROM user_tables) LOOP
-      EXECUTE IMMEDIATE 'DROP TABLE ' || rec.table_name || ' CASCADE CONSTRAINTS';
-   END LOOP;
-END;
--- REMOVE ME AFTER
 
