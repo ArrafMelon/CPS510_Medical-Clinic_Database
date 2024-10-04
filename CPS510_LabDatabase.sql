@@ -8,12 +8,21 @@ CREATE TABLE Employee (
     Salary DECIMAL(10, 2)
 );
 
+-- Create table for Patient
+CREATE TABLE Patient (
+    Patient_ID INT PRIMARY KEY,
+    First_Name VARCHAR(100),
+    Last_Name VARCHAR(100),
+    DOB DATE,
+    Gender VARCHAR(10),
+    HC_Number VARCHAR(50)
+);
+
 -- Create table for Medical Professional
 CREATE TABLE Medical_Professional (
     Medical_ID INT PRIMARY KEY,
     Emp_ID INT,
-    FOREIGN KEY (Emp_ID) REFERENCES Employee(Emp_ID),
-    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
+    FOREIGN KEY (Emp_ID) REFERENCES Employee(Emp_ID)
 );
 
 -- Create table for Receptionist (inherits from Employee)
@@ -33,16 +42,6 @@ CREATE TABLE Doctor (
 CREATE TABLE Nurse (
     Medical_ID INT PRIMARY KEY,
     FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID)
-);
-
--- Create table for Patient
-CREATE TABLE Patient (
-    Patient_ID INT PRIMARY KEY,
-    First_Name VARCHAR(100),
-    Last_Name VARCHAR(100),
-    DOB DATE,
-    Gender VARCHAR(10),
-    HC_Number VARCHAR(50)
 );
 
 -- Create table for Medical Record
@@ -85,8 +84,7 @@ CREATE TABLE Appointment (
     Patient_ID INT,
     Room_Number INT,
     Medical_ID INT,
-    Appointment_Date DATE,
-    Appointment_Time TIMESTAMP,
+    Appointment_Date TIMESTAMP,
     Reason VARCHAR(255),
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
     FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID)
@@ -96,10 +94,11 @@ CREATE TABLE Appointment (
 CREATE TABLE Lab_Test (
     Test_ID INT PRIMARY KEY,
     Test_Type VARCHAR(255),
-    Test_Result CLOB,
+    Test_Result VARCHAR2(255),
     Doctor_ID INT,
     Patient_ID INT,
     FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Medical_ID),
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
 );
+
 
