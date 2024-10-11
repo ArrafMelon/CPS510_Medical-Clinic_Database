@@ -60,3 +60,62 @@ FROM Lab_test
 GROUP BY Test_result
 ORDER BY Result_Count DESC;
 
+
+-- ADVANCED QUERIES
+-- Count the amount of perscriptions each doctor has given out
+SELECT D.Medical_ID, COUNT(Pr.Prescription_ID) AS Prescription_Count
+FROM Doctor D
+JOIN Prescription Pr ON D.Medical_ID = Pr.Medical_ID
+GROUP BY D.Medical_ID
+ORDER BY Prescription_Count DESC;
+
+-- Retrieve details of appointments including patient and the attending medical professional
+SELECT A.Appointment_ID, P.First_Name, P.Last_Name, MP.Medical_ID, A.Reason, A.Appointment_Date
+FROM Appointment A
+JOIN Patient P ON A.Patient_ID = P.Patient_ID
+JOIN Medical_Professional MP ON A.Medical_ID = MP.Medical_ID;
+
+-- List patients along with their associated medical records
+SELECT P.Patient_ID, MR.Medical_Record_ID, MR.Condition, MR.Allergies
+FROM Patient P
+JOIN Medical_Record MR ON P.Patient_ID = MR.Patient_ID;
+
+
+-- VIEWS
+-- Create a view that lists doctors and their specialties.
+CREATE VIEW Doctor_Specialty_View AS
+SELECT E.Emp_ID, D.Medical_ID, D.Specialty, E.Salary
+FROM Employee E
+JOIN Medical_Professional MP ON E.Emp_ID = MP.Emp_ID
+JOIN Doctor D ON MP.Medical_ID = D.Medical_ID;
+
+-- Create a view to simplify access to patient prescription details.
+CREATE VIEW Prescription_Details_View AS
+SELECT P.Patient_ID, Pr.Name, Pr.Dosage, Pr.Frequency
+FROM Prescription Pr
+JOIN Patient P ON Pr.Patient_ID = P.Patient_ID;
+
+-- Create a view summarizing appointments by patient.
+CREATE VIEW Appointment_Summary_View AS
+SELECT A.Patient_ID, COUNT(A.Appointment_ID) AS Total_Appointments
+FROM Appointment A
+GROUP BY A.Patient_ID;
+
+SELECT *
+FROM Doctor_Specialty_View;
+
+SELECT *
+FROM Prescription_Details_View;
+
+SELECT *
+FROM Appointment_Summary_View;
+
+
+-- DELETES
+-- Delete a patient
+DELETE FROM PATIENT
+WHERE PATIENT_ID = ...;
+
+-- Delete a appointment
+DELETE FROM Appointment
+WHERE Appointment_ID = ...;
