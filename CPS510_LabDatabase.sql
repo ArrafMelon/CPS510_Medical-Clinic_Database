@@ -101,4 +101,45 @@ CREATE TABLE Lab_Test (
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
 );
 
+-- A.7
+-- 3nf
+-- Create Patient_HC Table to remove transitive dependency
+CREATE TABLE Patient_HC (
+    HC_Number VARCHAR(50) PRIMARY KEY,
+    Patient_ID INT,
+    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
+);
+
+-- Update Prescription Table
+CREATE TABLE Prescription (
+    Prescription_ID INT PRIMARY KEY,
+    Medical_ID INT,
+    HC_Number VARCHAR(50),
+    Name VARCHAR(255),
+    Dosage VARCHAR(255),
+    Frequency VARCHAR(255),
+    FOREIGN KEY (HC_Number) REFERENCES Patient_HC(HC_Number),
+    FOREIGN KEY (Medical_ID) REFERENCES Doctor(Medical_ID)
+);
+
+-- 2nf
+-- Decompose Updates Table
+CREATE TABLE Medical_Record_Update (
+    Medical_Record_ID INT,
+    Medical_ID INT,
+    PRIMARY KEY (Medical_Record_ID, Medical_ID),
+    FOREIGN KEY (Medical_Record_ID) REFERENCES Medical_Record(Medical_Record_ID),
+    FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID)
+);
+
+CREATE TABLE Update_Details (
+    Update_ID INT PRIMARY KEY,
+    Medical_Record_ID INT,
+    Medical_ID INT,
+    FOREIGN KEY (Medical_Record_ID, Medical_ID) REFERENCES Medical_Record_Update(Medical_Record_ID, Medical_ID)
+);
+    
+
+
+
 
