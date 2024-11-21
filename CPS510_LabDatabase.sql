@@ -48,9 +48,9 @@ CREATE TABLE Nurse (
 CREATE TABLE Medical_Record (
     Medical_Record_ID INT PRIMARY KEY,
     Patient_ID INT,
-    Medical_History CLOB,
-    Condition VARCHAR2(255),
-    Allergies VARCHAR2(255),
+    Medical_History TEXT,
+    `Condition` VARCHAR(255),
+    Allergies VARCHAR(255),
     Height DECIMAL(5, 2),
     Weight DECIMAL(5, 2),
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
@@ -89,7 +89,7 @@ CREATE TABLE Appointment (
 CREATE TABLE Lab_Test (
     Test_ID INT PRIMARY KEY,
     Test_Type VARCHAR(255),
-    Test_Result VARCHAR2(255),
+    Test_Result VARCHAR(255),
     Doctor_ID INT,
     Patient_ID INT,
     FOREIGN KEY (Doctor_ID) REFERENCES Doctor(Medical_ID),
