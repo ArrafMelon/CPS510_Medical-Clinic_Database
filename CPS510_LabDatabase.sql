@@ -56,26 +56,21 @@ CREATE TABLE Medical_Record (
     FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID)
 );
 
--- Create table for Updates (M:N relationship between Medical Record and Medical Professional)
-CREATE TABLE Updates (
+-- 2nf
+-- Decompose Updates Table
+CREATE TABLE Medical_Record_Update (
     Medical_Record_ID INT,
     Medical_ID INT,
-    Update_ID INT PRIMARY KEY,
+    PRIMARY KEY (Medical_Record_ID, Medical_ID),
     FOREIGN KEY (Medical_Record_ID) REFERENCES Medical_Record(Medical_Record_ID),
     FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID)
 );
 
--- Create table for Prescription
-CREATE TABLE Prescription (
-    Prescription_ID INT PRIMARY KEY,
+CREATE TABLE Update_Details (
+    Update_ID INT PRIMARY KEY,
+    Medical_Record_ID INT,
     Medical_ID INT,
-    HC_Number VARCHAR(50),
-    Name VARCHAR(255),
-    Dosage VARCHAR(255),
-    Frequency VARCHAR(255),
-    Patient_ID INT,
-    FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
-    FOREIGN KEY (Medical_ID) REFERENCES Doctor(Medical_ID)
+    FOREIGN KEY (Medical_Record_ID, Medical_ID) REFERENCES Medical_Record_Update(Medical_Record_ID, Medical_ID)
 );
 
 -- Create table for Appointment
@@ -122,23 +117,6 @@ CREATE TABLE Prescription (
     FOREIGN KEY (Medical_ID) REFERENCES Doctor(Medical_ID)
 );
 
--- 2nf
--- Decompose Updates Table
-CREATE TABLE Medical_Record_Update (
-    Medical_Record_ID INT,
-    Medical_ID INT,
-    PRIMARY KEY (Medical_Record_ID, Medical_ID),
-    FOREIGN KEY (Medical_Record_ID) REFERENCES Medical_Record(Medical_Record_ID),
-    FOREIGN KEY (Medical_ID) REFERENCES Medical_Professional(Medical_ID)
-);
-
-CREATE TABLE Update_Details (
-    Update_ID INT PRIMARY KEY,
-    Medical_Record_ID INT,
-    Medical_ID INT,
-    FOREIGN KEY (Medical_Record_ID, Medical_ID) REFERENCES Medical_Record_Update(Medical_Record_ID, Medical_ID)
-);
-    
 
 
 

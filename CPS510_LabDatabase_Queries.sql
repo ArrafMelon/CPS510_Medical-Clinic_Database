@@ -119,3 +119,64 @@ WHERE PATIENT_ID = ...;
 -- Delete a appointment
 DELETE FROM Appointment
 WHERE Appointment_ID = ...;
+
+-- Advanced Queries 
+-- Query 1: Query which shows a list of doctors who have prescribed less than 5 prescriptions,
+-- Useful for documentation and to see which doctors are not prescribing as much as others
+SELECT D.Medical_ID, D.Specialty, COUNT(P.Prescription_ID)
+FROM Doctor D
+JOIN Prescription P ON D.Medical_ID = P.Medical_ID
+GROUP BY D.Medical_ID, D.Specialty
+HAVING COUNT(P.Prescription_ID) < 5;
+
+SELECT D.Medical_ID, D.Specialty, 
+       (SELECT COUNT(P.Prescription_ID) 
+        FROM Prescription P 
+        WHERE P.Medical_ID = D.Medical_ID) AS Prescription_Count
+FROM Doctor D
+UNION
+SELECT D.Medical_ID, D.Specialty, 0 AS Prescription_Count
+FROM Doctor D
+WHERE D.Medical_ID NOT IN (SELECT DISTINCT Medical_ID FROM Prescription)
+HAVING Prescription_Count < 5;
+
+-- Query 2: Get average height and weight for both male and female patients in the clinic seperately.
+-- Useful for data analysis on the average distribution of height and weight
+-- Have count greater than one so one patient cannot determine a single genders average
+SELECT P.Gender, AVG(MR.Height) AS Avg_Height, AVG(MR.Weight) AS Avg_Weight
+FROM Patient P
+JOIN Medical_Record MR ON P.Patient_ID = MR.Patient_ID
+GROUP BY P.Gender
+HAVING COUNT(P.PATIENT_ID) > 1;
+
+-- Query 3 (Rewritten): Check which patients do not have an appointment booked in the database
+SELECT Patient.Patient_ID, Patient.First_Name, Patient.Last_Name
+FROM Patient
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Appointment
+    WHERE Appointment.Patient_ID = Patient.Patient_ID
+);
+
+-- Query 4: Using minus operator use it to check which patients do not have an appointment booked in the database
+SELECT Patient.Patient_ID, Patient.First_Name, Patient.Last_Name
+FROM Patient
+MINUS
+SELECT Appointment.Patient_ID, Patient.First_Name, Patient.Last_Name
+FROM Appointment
+LEFT JOIN Patient ON Appointment.Patient_ID = Patient.Patient_ID;
+
+-- Query 5: Selecting patients who have above average weight in the database
+-- This will help in seeing which patients physical health may need a closer look
+SELECT Medical_Record.Patient_ID, Patient.First_Name, Patient.Last_Name, Medical_Record.Weight
+FROM Medical_Record
+JOIN Patient ON Medical_Record.Patient_ID = Patient.Patient_ID
+WHERE Medical_Record.Weight > (SELECT AVG(Weight) FROM Medical_Record);
+
+-- Query 6: Query which shows a list of doctors who have done less than 5 lab tests,
+-- Useful for documentation and to see which doctors are not testing as much as others
+SELECT D.Medical_ID, D.Specialty, COUNT(LT.Test_ID) AS Lab_Test_Count
+FROM Doctor D
+JOIN Lab_Test LT ON D.Medical_ID = LT.Doctor_ID
+GROUP BY D.Medical_ID, D.Specialty
+HAVING COUNT(LT.Test_ID) < 5;
