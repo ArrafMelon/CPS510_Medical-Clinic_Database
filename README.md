@@ -23,3 +23,5 @@ This is a full-stack web application for managing a MySQL database. The applicat
 3. **Postman** (Optional): For testing API endpoints.
 
 ---
+## ER Diagram of Database
+![Screenshot (117)](https://github.com/user-attachments/assets/fb4c02f2-858b-4235-98a5-494c59ec15b8)
